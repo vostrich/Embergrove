@@ -12,6 +12,7 @@ import {
 } from '@data/Constants';
 
 export class SaveSystem {
+  public static activeSave: SaveData | null = null;
   private static currentSlot: number = 0;
 
   // ── Slot Management ──────────────────────────────────────
@@ -40,6 +41,7 @@ export class SaveSystem {
 
     data.timestamp = Date.now();
     localStorage.setItem(key, JSON.stringify(data));
+    SaveSystem.activeSave = data;
   }
 
   // ── Load ─────────────────────────────────────────────────
@@ -53,7 +55,9 @@ export class SaveSystem {
 
     const data = JSON.parse(raw) as SaveData;
     SaveSystem.currentSlot = s;
-    return SaveSystem.migrate(data);
+    const migrated = SaveSystem.migrate(data);
+    SaveSystem.activeSave = migrated;
+    return migrated;
   }
 
   // ── Load Backup ─────────────────────────────────────────
@@ -91,7 +95,7 @@ export class SaveSystem {
   // ── New Game ────────────────────────────────────────────
 
   static newGameData(slot: number): SaveData {
-    return {
+    const data: SaveData = {
       schemaVersion: SAVE_SCHEMA_VERSION,
       slot,
       timestamp: Date.now(),
@@ -120,6 +124,8 @@ export class SaveSystem {
         timeOfDay: 0.5,
       },
     };
+    SaveSystem.activeSave = data;
+    return data;
   }
 
   // ── Migration ───────────────────────────────────────────
