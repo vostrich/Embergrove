@@ -3,6 +3,7 @@ import { BootScene } from '@scenes/BootScene';
 import { PreloadScene } from '@scenes/PreloadScene';
 import { MainMenuScene } from '@scenes/MainMenuScene';
 import { EmberCottageScene } from '@scenes/EmberCottageScene';
+import { PauseScene } from '@scenes/PauseScene';
 import { UIScene } from '@scenes/UIScene';
 import { GAME_WIDTH, GAME_HEIGHT } from '@data/Constants';
 
@@ -41,6 +42,7 @@ const config: Phaser.Types.Core.GameConfig = {
     PreloadScene,
     MainMenuScene,
     EmberCottageScene,
+    PauseScene,
     UIScene,
   ],
 };
