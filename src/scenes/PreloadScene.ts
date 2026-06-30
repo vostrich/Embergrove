@@ -120,5 +120,28 @@ export class PreloadScene extends Phaser.Scene {
         gfx.destroy();
       }
     }
+
+    // Custom placeholder generation for Sprint 1
+    const customPlaceholders = [
+      { key: 'placeholder-cottage', width: 64, height: 64, color: 0x6b3e1f },
+      { key: 'placeholder-building', width: 64, height: 64, color: 0x6b6b6b },
+      { key: 'placeholder-tree', width: 32, height: 32, color: 0x2d5b2d },
+      { key: 'placeholder-rock', width: 24, height: 24, color: 0x5b5b5b },
+      { key: 'placeholder-grass-tile', width: 16, height: 16, color: 0x4a7c3e },
+      { key: 'ember-particle', width: 4, height: 4, color: 0xff8c42 },
+      { key: 'coin', width: 16, height: 16, color: 0xffd700 },
+      { key: 'sun', width: 24, height: 24, color: 0xffeb3b },
+      { key: 'moon', width: 24, height: 24, color: 0xd4d4d4 },
+    ];
+
+    for (const item of customPlaceholders) {
+      if (!this.textures.exists(item.key)) {
+        const gfx = this.add.graphics();
+        gfx.fillStyle(item.color, 1);
+        gfx.fillRect(0, 0, item.width, item.height);
+        gfx.generateTexture(item.key, item.width, item.height);
+        gfx.destroy();
+      }
+    }
   }
 }
