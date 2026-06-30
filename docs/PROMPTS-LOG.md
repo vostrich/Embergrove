@@ -14,3 +14,16 @@ All prompts used for development are recorded here for ISO 42001-lite compliance
 - **Output**: ~35 files created, single commit on `dev` branch.
 - **Review Status**: Pending human review
 - **Issues Found**: None at generation time
+
+---
+
+## Entry 002 — Sprint 1 Cottage Scene
+
+- **Date**: 2026-06-30
+- **Agent**: Antigravity (Gemini 3.5 Flash)
+- **Type**: Scene & Systems Development
+- **Scope**: EmberCottageScene with TilemapGPULayer fallback, DayNightSystem time cycle, MainMenuScene particle effect and slot continue loader, PauseScene overlay, parallel UIScene HUD bars, placeholders preload generation, main scene registration.
+- **Prompt Summary**: Implement Sprint 1 requirements using Phaser 4 APIs (TilemapGPULayer, SpriteGPULayer, Stencil masks, multiply blend tints) and build the day/night cycle, menus, and parallel UI HUD.
+- **Output**: 5 new/modified scenes, 1 new system, 1 updated config, 3 updated docs.
+- **Review Status**: Approved by USER (proceeding with git commits, tag, and push)
+- **Issues Found**: None.
