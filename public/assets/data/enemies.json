@@ -1,0 +1,186 @@
+[
+  {
+    "id": "veil-rat",
+    "name": "Veil Rat",
+    "type": "normal",
+    "hp": 15,
+    "attack": 3,
+    "defense": 0,
+    "speed": 80,
+    "xpReward": 10,
+    "spriteKey": "veil-rat",
+    "behavior": "chase",
+    "aggroRange": 120,
+    "deaggroRange": 200,
+    "attacks": [
+      {
+        "id": "veil-rat-bite",
+        "name": "Bite",
+        "damage": 3,
+        "range": 20,
+        "cooldownMs": 1000,
+        "windupMs": 200,
+        "activeMs": 150,
+        "recoveryMs": 400
+      }
+    ],
+    "loot": [
+      {
+        "itemId": "healing-salve",
+        "chance": 0.15,
+        "minQuantity": 1,
+        "maxQuantity": 1
+      }
+    ]
+  },
+  {
+    "id": "hollow-wolf",
+    "name": "Hollow Wolf",
+    "type": "normal",
+    "hp": 40,
+    "attack": 8,
+    "defense": 2,
+    "speed": 120,
+    "xpReward": 25,
+    "spriteKey": "hollow-wolf",
+    "behavior": "chase",
+    "aggroRange": 160,
+    "deaggroRange": 280,
+    "attacks": [
+      {
+        "id": "hollow-wolf-claw",
+        "name": "Claw Swipe",
+        "damage": 8,
+        "range": 28,
+        "cooldownMs": 800,
+        "windupMs": 250,
+        "activeMs": 200,
+        "recoveryMs": 350
+      },
+      {
+        "id": "hollow-wolf-lunge",
+        "name": "Lunge",
+        "damage": 12,
+        "range": 60,
+        "cooldownMs": 3000,
+        "windupMs": 400,
+        "activeMs": 300,
+        "recoveryMs": 600
+      }
+    ],
+    "loot": [
+      {
+        "itemId": "ember-shard",
+        "chance": 0.25,
+        "minQuantity": 1,
+        "maxQuantity": 2
+      },
+      {
+        "itemId": "healing-salve",
+        "chance": 0.3,
+        "minQuantity": 1,
+        "maxQuantity": 1
+      }
+    ]
+  },
+  {
+    "id": "mist-wraith",
+    "name": "Mist Wraith",
+    "type": "elite",
+    "hp": 80,
+    "attack": 14,
+    "defense": 5,
+    "speed": 60,
+    "xpReward": 60,
+    "spriteKey": "mist-wraith",
+    "behavior": "ambush",
+    "aggroRange": 100,
+    "deaggroRange": 250,
+    "attacks": [
+      {
+        "id": "mist-wraith-touch",
+        "name": "Veil Touch",
+        "damage": 14,
+        "range": 30,
+        "cooldownMs": 1200,
+        "windupMs": 300,
+        "activeMs": 250,
+        "recoveryMs": 500
+      },
+      {
+        "id": "mist-wraith-scream",
+        "name": "Wail",
+        "damage": 6,
+        "range": 80,
+        "cooldownMs": 5000,
+        "windupMs": 600,
+        "activeMs": 400,
+        "recoveryMs": 800
+      }
+    ],
+    "loot": [
+      {
+        "itemId": "ember-shard",
+        "chance": 0.4,
+        "minQuantity": 2,
+        "maxQuantity": 3
+      },
+      {
+        "itemId": "iron-blade",
+        "chance": 0.08,
+        "minQuantity": 1,
+        "maxQuantity": 1
+      }
+    ]
+  },
+  {
+    "id": "marsh-maw",
+    "name": "Marsh Maw",
+    "type": "normal",
+    "hp": 55,
+    "attack": 10,
+    "defense": 8,
+    "speed": 40,
+    "xpReward": 35,
+    "spriteKey": "marsh-maw",
+    "behavior": "stationary",
+    "aggroRange": 80,
+    "deaggroRange": 150,
+    "attacks": [
+      {
+        "id": "marsh-maw-chomp",
+        "name": "Chomp",
+        "damage": 10,
+        "range": 24,
+        "cooldownMs": 1500,
+        "windupMs": 350,
+        "activeMs": 200,
+        "recoveryMs": 700
+      },
+      {
+        "id": "marsh-maw-spit",
+        "name": "Acid Spit",
+        "damage": 6,
+        "range": 100,
+        "cooldownMs": 4000,
+        "windupMs": 500,
+        "activeMs": 300,
+        "recoveryMs": 900
+      }
+    ],
+    "loot": [
+      {
+        "itemId": "healing-salve",
+        "chance": 0.35,
+        "minQuantity": 1,
+        "maxQuantity": 2
+      },
+      {
+        "itemId": "ember-shard",
+        "chance": 0.2,
+        "minQuantity": 1,
+        "maxQuantity": 1
+      }
+    ]
+  }
+]

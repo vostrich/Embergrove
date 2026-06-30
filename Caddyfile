@@ -1,0 +1,20 @@
+embergrove.ainyubi.com {
+    root * /var/www/embergrove/prod
+    file_server
+    encode gzip
+    try_files {path} /index.html
+
+    header Cache-Control "public, max-age=31536000, immutable" /assets/*
+    header Cache-Control "no-cache" /index.html
+}
+
+dev.embergrove.ainyubi.com {
+    root * /var/www/embergrove/dev
+    file_server
+    encode gzip
+    try_files {path} /index.html
+
+    basicauth * {
+        embergrove $2a$14$REPLACE_WITH_HASHED_PASSWORD
+    }
+}

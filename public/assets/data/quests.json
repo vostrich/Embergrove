@@ -1,0 +1,144 @@
+[
+  {
+    "id": "q-grandmas-letter",
+    "name": "Grandma's Letter",
+    "description": "Deliver Grandma Elara's letter to the old smithy across the hollow.",
+    "status": "active",
+    "objectives": [
+      {
+        "id": "qgl-talk-grandma",
+        "description": "Talk to Grandma Elara",
+        "type": "talk",
+        "targetId": "npc-grandma",
+        "targetName": "Grandma Elara",
+        "requiredCount": 1,
+        "currentCount": 1,
+        "completed": true
+      },
+      {
+        "id": "qgl-reach-smithy",
+        "description": "Reach the old smithy",
+        "type": "reach",
+        "targetId": "area-smithy",
+        "targetName": "Old Smithy",
+        "requiredCount": 1,
+        "currentCount": 0,
+        "completed": false
+      },
+      {
+        "id": "qgl-talk-smith",
+        "description": "Talk to Marrow the Smith",
+        "type": "talk",
+        "targetId": "npc-smith",
+        "targetName": "Marrow",
+        "requiredCount": 1,
+        "currentCount": 0,
+        "completed": false
+      }
+    ],
+    "reward": {
+      "xp": 50,
+      "items": ["healing-salve"]
+    },
+    "prerequisiteQuests": []
+  },
+  {
+    "id": "q-first-blood",
+    "name": "First Blood",
+    "description": "Slay 3 veil-rats prowling near the cottage.",
+    "status": "active",
+    "objectives": [
+      {
+        "id": "qfb-kill-rats",
+        "description": "Kill veil-rats",
+        "type": "kill",
+        "targetId": "veil-rat",
+        "targetName": "Veil Rat",
+        "requiredCount": 3,
+        "currentCount": 0,
+        "completed": false
+      }
+    ],
+    "reward": {
+      "xp": 30,
+      "items": ["healing-salve"]
+    },
+    "prerequisiteQuests": []
+  },
+  {
+    "id": "q-meet-marrow",
+    "name": "Meet Marrow",
+    "description": "Travel to the old smithy and introduce yourself to Marrow the Smith.",
+    "status": "locked",
+    "objectives": [
+      {
+        "id": "qmm-reach-smithy",
+        "description": "Reach the old smithy",
+        "type": "reach",
+        "targetId": "area-smithy",
+        "targetName": "Old Smithy",
+        "requiredCount": 1,
+        "currentCount": 0,
+        "completed": false
+      },
+      {
+        "id": "qmm-talk-marrow",
+        "description": "Talk to Marrow",
+        "type": "talk",
+        "targetId": "npc-smith",
+        "targetName": "Marrow",
+        "requiredCount": 1,
+        "currentCount": 0,
+        "completed": false
+      }
+    ],
+    "reward": {
+      "xp": 40,
+      "items": []
+    },
+    "prerequisiteQuests": ["q-first-blood"]
+  },
+  {
+    "id": "q-rebuild-smithy",
+    "name": "Rebuild the Smithy",
+    "description": "Collect ember-shards and iron scraps to repair Marrow's forge.",
+    "status": "locked",
+    "objectives": [
+      {
+        "id": "qrs-collect-shards",
+        "description": "Collect ember-shards",
+        "type": "collect",
+        "targetId": "ember-shard",
+        "targetName": "Ember Shard",
+        "requiredCount": 5,
+        "currentCount": 0,
+        "completed": false
+      },
+      {
+        "id": "qrs-collect-iron",
+        "description": "Collect iron scraps",
+        "type": "collect",
+        "targetId": "iron-scrap",
+        "targetName": "Iron Scrap",
+        "requiredCount": 3,
+        "currentCount": 0,
+        "completed": false
+      },
+      {
+        "id": "qrs-return-marrow",
+        "description": "Return to Marrow with the materials",
+        "type": "talk",
+        "targetId": "npc-smith",
+        "targetName": "Marrow",
+        "requiredCount": 1,
+        "currentCount": 0,
+        "completed": false
+      }
+    ],
+    "reward": {
+      "xp": 100,
+      "items": ["iron-blade"]
+    },
+    "prerequisiteQuests": ["q-meet-marrow"]
+  }
+]

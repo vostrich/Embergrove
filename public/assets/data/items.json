@@ -1,0 +1,92 @@
+[
+  {
+    "id": "rusted-blade",
+    "name": "Rusted Blade",
+    "description": "A worn blade, still sharp enough to cut veil-rats.",
+    "type": "weapon",
+    "rarity": "common",
+    "level": 1,
+    "stats": { "attack": 3 },
+    "affixes": [],
+    "effect": null,
+    "stackable": false,
+    "quantity": 1,
+    "maxStack": 1
+  },
+  {
+    "id": "ember-lantern",
+    "name": "Ember Lantern",
+    "description": "A small lantern that burns with a faint ember glow. Keeps the mist at bay.",
+    "type": "accessory",
+    "rarity": "uncommon",
+    "level": 1,
+    "stats": { "defense": 1 },
+    "affixes": [],
+    "effect": null,
+    "stackable": false,
+    "quantity": 1,
+    "maxStack": 1
+  },
+  {
+    "id": "healing-salve",
+    "name": "Healing Salve",
+    "description": "A crude herbal paste that stings but mends wounds.",
+    "type": "consumable",
+    "rarity": "common",
+    "level": 1,
+    "stats": {},
+    "affixes": [],
+    "effect": {
+      "type": "heal_hp",
+      "value": 30,
+      "durationMs": 0
+    },
+    "stackable": true,
+    "quantity": 3,
+    "maxStack": 10
+  },
+  {
+    "id": "ember-shard",
+    "name": "Ember Shard",
+    "description": "A fragment of crystallized ember. Warm to the touch.",
+    "type": "material",
+    "rarity": "ember",
+    "level": 1,
+    "stats": {},
+    "affixes": [],
+    "effect": null,
+    "stackable": true,
+    "quantity": 1,
+    "maxStack": 99
+  },
+  {
+    "id": "iron-blade",
+    "name": "Iron Blade",
+    "description": "A properly forged iron sword. Reliable and balanced.",
+    "type": "weapon",
+    "rarity": "uncommon",
+    "level": 3,
+    "stats": { "attack": 7 },
+    "affixes": [],
+    "effect": null,
+    "stackable": false,
+    "quantity": 1,
+    "maxStack": 1
+  },
+  {
+    "id": "veilforged-edge",
+    "name": "Veilforged Edge",
+    "description": "A blade tempered in the Hollow Veil itself. It hums with otherworldly energy.",
+    "type": "weapon",
+    "rarity": "veilforged",
+    "level": 10,
+    "stats": { "attack": 18, "speed": 5 },
+    "affixes": [
+      { "id": "affix-veil-pierce", "name": "Veil Pierce", "stat": "attack", "value": 4 }
+    ],
+    "effect": null,
+    "stackable": false,
+    "quantity": 1,
+    "maxStack": 1
+  }
+]
