@@ -19,3 +19,30 @@ The following textures are generated programmatically inside `PreloadScene.ts` a
 | `moon` | 24 × 24 px | Light Grey (`#d4d4d4` / `0xd4d4d4`) | HUD Time icon (Night phase) |
 
 *Note: In Sprint 2 and onwards, these keys will gradually be replaced by real asset loaders from `public/assets/`.*
+
+## Sprint 2 Additions
+
+No external assets were downloaded. Additional programmatically generated placeholder textures were added in `PreloadScene.ts`:
+
+| Texture Key | Resolution | Colors | Usage |
+| :--- | :--- | :--- | :--- |
+| `item-pickup` | 16 × 16 px | Amber (`#e8a54b` / `0xe8a54b`) | Ground loot pickup sprite (ItemPickup entity) |
+| `blood-particle` | 4 × 4 px | Dark Red (`#8b0000` / `0x8b0000`) | Enemy hit blood particle burst (HitFeedbackSystem) |
+
+### Existing Sprite Keys Used by Sprint 2 Entities
+
+The following Sprint 1 placeholder textures are reused by the new Player and Enemy entities:
+
+| Texture Key | Sprint 1 Usage | Sprint 2 Additional Usage |
+| :--- | :--- | :--- |
+| `player-idle` | Registered but unused | Player sprite (Idle state) |
+| `player-run` | Registered but unused | Player sprite (Moving state, future animation) |
+| `player-attack` | Registered but unused | Player sprite (Attacking state, future animation) |
+| `player-dodge` | Registered but unused | Player sprite (Dodging state, future animation) |
+| `veil-rat` | Registered but unused | VeilRat enemy entity |
+| `hollow-wolf` | Registered but unused | HollowWolf enemy entity (Sprint 3 spawn) |
+| `mist-wraith` | Registered but unused | MistWraith enemy entity |
+| `ember-particle` | MainMenuScene background | HitFeedbackSystem particle bursts, death particles, pickup burst |
+| `coin` | HUD gold icon | ItemPickup gold coin drops |
+
+*Note: Sprite animations (walk/attack/hurt/dead per direction) are not yet implemented — entities render as static placeholder rectangles. Full spritesheet animation support planned for Sprint 3–4.*

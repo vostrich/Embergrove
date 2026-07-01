@@ -27,3 +27,16 @@ All prompts used for development are recorded here for ISO 42001-lite compliance
 - **Output**: 5 new/modified scenes, 1 new system, 1 updated config, 3 updated docs.
 - **Review Status**: Approved by USER (proceeding with git commits, tag, and push)
 - **Issues Found**: None.
+
+---
+
+## Entry 003 — Sprint 2 Combat System
+
+- **Date**: 2026-07-01
+- **Agent**: GLM-5.2 Max (8/11 tasks) + GLM-5-Turbo (3/11 tasks)
+- **Type**: Entity, System & Integration Development
+- **Scope**: Player class with state machine + 8-state FSM, CombatSystem (pure static damage formula, crit, knockback, parry, i-frames), Enemy base class + 3 archetypes (VeilRat aggressive, HollowWolf pack, MistWraith ranged), EnemySpawner with 60s respawn + 1.5× night scaling, HitFeedbackSystem (floating damage numbers, screen shake, particle bursts, flash, SFX), LootSystem + ItemPickup with magnet pickup + rarity glow, EnemyHealthBar with fade, SaveSystem.awardXp + level-up stub, CombatSystem + SaveSystem unit tests (Vitest), governance docs.
+- **Prompt Summary**: "EMBERGROVE SPRINT 2: PLAYER + COMBAT + 3 ENEMIES" mega-prompt covering Parts A–I: Player entity replacing the Sprint 1 orange placeholder, combat system with damage formula, 3 enemy types with distinct AI profiles, hit feedback, loot, health bars, XP, unit tests, and governance updates. Phaser 4 rules enforced (addFilter, setLighting, SpriteGPULayer, Stencil, setTintMode MULTIPLY, ParticleEmitter, camera.shake).
+- **Output**: 17 new/modified source files, 2 new test files, 4 updated docs.
+- **Review Status**: Pending human review
+- **Issues Found**: None.

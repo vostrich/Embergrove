@@ -20,6 +20,7 @@
 | R06 | Prompt log becomes unwieldy                | Medium     | Low    | Append-only format, sprint-bounded      | Accepted   |
 | R07 | Asset naming inconsistencies               | Low        | Medium | Centralized AssetRegistry               | Mitigated  |
 | R08 | Dependency version conflicts               | Low        | Medium | Lock file, CI verification               | Mitigated  |
+| R09 | Combat balance hallucination               | Medium     | High   | JSON data-driven stats, Vitest unit tests on CombatSystem, human play-test gate | Mitigated  |
 
 ## Stakeholders
 
