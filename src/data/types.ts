@@ -62,9 +62,42 @@ export interface Stats {
   attack: number;
   defense: number;
   speed: number;
+  luck: number; // influences crit chance; full effect in Sprint 5 skill trees
   level: number;
   xp: number;
   xpToNext: number;
+}
+
+// ─── Combatant ────────────────────────────────────────────
+// Minimal contract that CombatSystem needs from anything that can fight.
+// Implemented by Player and Enemy.
+export interface Combatant {
+  attack: number;
+  defense: number;
+  luck: number;
+  speed: number;
+  x: number;
+  y: number;
+}
+
+// ─── AttackType ───────────────────────────────────────────
+export enum AttackType {
+  Light = 'light',
+  Heavy = 'heavy',
+}
+
+// ─── Weapon ───────────────────────────────────────────────
+export interface Weapon {
+  id: string;
+  attackMult: number; // multiplier applied to attacker.attack
+  attackFlat: number; // flat bonus added after multiplier
+}
+
+// ─── AttackResult ─────────────────────────────────────────
+export interface AttackResult {
+  damage: number;
+  isCrit: boolean;
+  isDodged: boolean;
 }
 
 // ─── Affix ────────────────────────────────────────────────
@@ -201,6 +234,7 @@ export interface SaveData {
     direction: Direction;
     stats: Stats;
     inventory: Item[];
+    gold: number;
     equipment: {
       weapon: string | null;
       armor: string | null;
