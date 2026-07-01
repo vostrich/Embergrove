@@ -132,6 +132,8 @@ export class PreloadScene extends Phaser.Scene {
       { key: 'coin', width: 16, height: 16, color: 0xffd700 },
       { key: 'sun', width: 24, height: 24, color: 0xffeb3b },
       { key: 'moon', width: 24, height: 24, color: 0xd4d4d4 },
+      { key: 'item-pickup', width: 16, height: 16, color: 0xe8a54b },
+      { key: 'blood-particle', width: 4, height: 4, color: 0x8b0000 },
     ];
 
     for (const item of customPlaceholders) {
