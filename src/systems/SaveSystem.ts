@@ -9,6 +9,7 @@ import {
   PLAYER_BASE_MANA,
   SCENES,
   xpToLevel,
+  MAX_LEVEL,
 } from '@data/Constants';
 
 export class SaveSystem {
@@ -110,6 +111,7 @@ export class SaveSystem {
           SaveSystem.createItem('rusted-blade'),
           SaveSystem.createItem('ember-lantern'),
         ],
+        gold: 0,
         equipment: {
           weapon: 'rusted-blade',
           armor: null,
@@ -128,13 +130,64 @@ export class SaveSystem {
     return data;
   }
 
+  // ── XP / Leveling ───────────────────────────────────────
+
+  /**
+   * Award XP to the active save's player. Handles level-up cascades.
+   * Returns the number of level-ups gained (0 if none).
+   *
+   * Sprint 2 stub: increments level and emits PLAYER_LEVEL_UP via the
+   * callback, but does not award skill points (Sprint 5).
+   */
+  static awardXp(
+    amount: number,
+    onLevelUp?: (newLevel: number) => void
+  ): number {
+    if (!SaveSystem.activeSave) return 0;
+    const stats = SaveSystem.activeSave.player.stats;
+    if (stats.level >= MAX_LEVEL) {
+      stats.xp = stats.xpToNext;
+      return 0;
+    }
+
+    stats.xp += amount;
+    let levelsGained = 0;
+
+    while (stats.xp >= stats.xpToNext && stats.level < MAX_LEVEL) {
+      stats.xp -= stats.xpToNext;
+      stats.level += 1;
+      stats.xpToNext = xpToLevel(stats.level);
+      levelsGained += 1;
+      // Small stat bump per level (stub; full progression in Sprint 5).
+      stats.maxHp += 10;
+      stats.hp = stats.maxHp;
+      stats.maxStamina += 5;
+      stats.stamina = stats.maxStamina;
+    }
+
+    if (levelsGained > 0 && onLevelUp) {
+      onLevelUp(stats.level);
+    }
+    return levelsGained;
+  }
+
   // ── Migration ───────────────────────────────────────────
 
   static migrate(data: SaveData): SaveData {
     const current = SAVE_SCHEMA_VERSION;
+
+    // Field-level guards (apply regardless of schemaVersion so that
+    // partially-migrated or hand-edited saves stay valid):
+    if (data.player) {
+      if (data.player.gold === undefined) data.player.gold = 0;
+      if (data.player.stats) {
+        if (data.player.stats.luck === undefined) data.player.stats.luck = 0;
+      }
+    }
+
     if (data.schemaVersion >= current) return data;
 
-    // Future migrations go here, e.g.:
+    // Future schema migrations go here, e.g.:
     // if (data.schemaVersion < 2) { apply v2 migrations; }
     // if (data.schemaVersion < 3) { apply v3 migrations; }
 
@@ -159,6 +212,7 @@ export class SaveSystem {
       attack: 5,
       defense: 2,
       speed: 160,
+      luck: 0,
       level: 1,
       xp: 0,
       xpToNext: xpToLevel(1),
