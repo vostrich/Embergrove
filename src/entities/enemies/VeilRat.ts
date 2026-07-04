@@ -17,6 +17,8 @@ export class VeilRat extends Enemy {
     defense: 0,
     speed: 110,
     xpReward: 8,
+    goldMin: 1,
+    goldMax: 3,
     detectionRadius: 220,
     attackRange: 24,
     attackCooldown: 900,

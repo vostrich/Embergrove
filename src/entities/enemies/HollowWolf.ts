@@ -24,6 +24,8 @@ export class HollowWolf extends Enemy {
     defense: 4,
     speed: 95,
     xpReward: 22,
+    goldMin: 3,
+    goldMax: 8,
     detectionRadius: 280,
     attackRange: 36,
     attackCooldown: 1200,

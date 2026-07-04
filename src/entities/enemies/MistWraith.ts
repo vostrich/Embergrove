@@ -20,6 +20,8 @@ export class MistWraith extends Enemy {
     defense: 0,
     speed: 80,
     xpReward: 30,
+    goldMin: 5,
+    goldMax: 12,
     detectionRadius: 360,
     attackRange: 200, // max kite range
     attackCooldown: 1600,
