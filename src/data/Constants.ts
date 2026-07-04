@@ -70,9 +70,27 @@ export const TIME_OF_DAY = {
 
 // ─── Save System ──────────────────────────────────────────
 export const SAVE_KEY_PREFIX = 'embergrove_save_';
-export const SAVE_SCHEMA_VERSION = 1;
+export const SAVE_SCHEMA_VERSION = 2; // v2: slot-indexed inventory + 4 equipment slots
 export const AUTOSAVE_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 export const SAVE_SLOTS = 3;
+
+// ─── Inventory ────────────────────────────────────────────
+export const INVENTORY_COLS = 6;
+export const INVENTORY_ROWS = 4;
+export const INVENTORY_SLOTS = INVENTORY_COLS * INVENTORY_ROWS; // 24
+export const HOTBAR_SLOTS = 6;
+export const BASE_CARRY_WEIGHT = 50; // kg at level 1
+export const CARRY_WEIGHT_PER_LEVEL = 2; // +2 kg per player level
+
+// ─── Crafting Stations ───────────────────────────────────
+export const CRAFTING_STATIONS = {
+  APOTHECARY: 'apothecary',
+  SMITHY: 'smithy',
+} as const;
+
+// ─── Loot Glow Radii ─────────────────────────────────────
+export const GLOW_RADIUS_MINOR = 8; // common / uncommon
+export const GLOW_RADIUS_MAJOR = 12; // ember / veilforged / ancestral
 
 // ─── Rarity Colors ───────────────────────────────────────
 export const RARITY_COLORS: Record<string, number> = {
@@ -81,6 +99,24 @@ export const RARITY_COLORS: Record<string, number> = {
   ember: 0xe8a54b,
   veilforged: 0x9c27b0,
   ancestral: 0xffd700,
+};
+
+/** Rarity ordering for sort (low → high). */
+export const RARITY_ORDER: Record<string, number> = {
+  common: 0,
+  uncommon: 1,
+  ember: 2,
+  veilforged: 3,
+  ancestral: 4,
+};
+
+/** Item type → equipment slot mapping (null = not equippable). */
+export const TYPE_TO_EQUIP_SLOT: Record<string, string | null> = {
+  weapon: 'weapon',
+  armor: 'armor',
+  charm: 'charm',
+  lantern: 'lantern',
+  accessory: 'charm', // legacy accessories map to charm slot
 };
 
 // ─── Scene Keys ──────────────────────────────────────────
@@ -116,6 +152,7 @@ export const EVENTS = {
   QUEST_UPDATE: 'quest:update',
   QUEST_COMPLETE: 'quest:complete',
   INVENTORY_CHANGE: 'inventory:change',
+  EQUIPMENT_CHANGED: 'equipment:changed',
   TIME_CHANGE: 'world:timeChange',
   SAVE_GAME: 'save:game',
   LOAD_GAME: 'save:load',

@@ -30,6 +30,8 @@ export interface EnemyArchetype {
   defense: number;
   speed: number;
   xpReward: number;
+  goldMin: number; // inclusive gold drop range (data-driven)
+  goldMax: number;
   detectionRadius: number;
   attackRange: number;
   attackCooldown: number; // ms
@@ -64,6 +66,8 @@ export abstract class Enemy extends Phaser.Physics.Arcade.Sprite implements Comb
 
   public readonly config: EnemyArchetype;
   public readonly xpReward: number;
+  public readonly goldMin: number;
+  public readonly goldMax: number;
   public readonly lootTable: LootDrop[];
 
   protected target: PlayerTarget | null = null;
@@ -102,6 +106,8 @@ export abstract class Enemy extends Phaser.Physics.Arcade.Sprite implements Comb
     this.defense = config.defense;
     this.speed = config.speed;
     this.xpReward = config.xpReward;
+    this.goldMin = config.goldMin;
+    this.goldMax = config.goldMax;
     this.lootTable = config.loot;
     this.onAttackPlayer = hooks.onAttackPlayer;
     this.onDeath = hooks.onDeath;

@@ -79,5 +79,6 @@ export const AUDIO: AudioEntry[] = [
 export const DATA_FILES: DataEntry[] = [
   { key: 'items-data', path: 'assets/data/items.json' },
   { key: 'enemies-data', path: 'assets/data/enemies.json' },
+  { key: 'recipes-data', path: 'assets/data/recipes.json' },
   { key: 'quests-data', path: 'assets/data/quests.json' },
 ];

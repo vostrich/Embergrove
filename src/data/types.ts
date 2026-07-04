@@ -19,11 +19,16 @@ export enum Rarity {
 export enum ItemType {
   Weapon = 'weapon',
   Armor = 'armor',
-  Accessory = 'accessory',
+  Accessory = 'accessory', // legacy; kept for migration only
+  Charm = 'charm',
+  Lantern = 'lantern',
   Consumable = 'consumable',
   Material = 'material',
   Quest = 'quest',
 }
+
+/** Equipment slot keys — mirrors EquipmentSlots field names. */
+export type EquipmentSlot = 'weapon' | 'armor' | 'charm' | 'lantern';
 
 // ─── EnemyType ────────────────────────────────────────────
 export enum EnemyType {
@@ -129,6 +134,25 @@ export interface Item {
   stackable: boolean;
   quantity: number;
   maxStack: number;
+  weight: number; // kg per unit; used by InventorySystem weight gate
+  value: number; // base gold value; shown in tooltip
+}
+
+// ─── InventoryEntry ───────────────────────────────────────
+// Slot-indexed inventory record. `slot` ∈ [0, INVENTORY_SLOTS-1].
+// Item metadata is resolved via ItemRegistry.get(itemId).
+export interface InventoryEntry {
+  slot: number;
+  itemId: string;
+  count: number;
+}
+
+// ─── EquipmentSlots ───────────────────────────────────────
+export interface EquipmentSlots {
+  weapon: string | null;
+  armor: string | null;
+  charm: string | null;
+  lantern: string | null;
 }
 
 // ─── QuestObjective ────────────────────────────────────────
@@ -201,6 +225,8 @@ export interface EnemyConfig {
   defense: number;
   speed: number;
   xpReward: number;
+  goldMin: number; // inclusive gold drop range (data-driven, replaces hardcoded)
+  goldMax: number;
   loot: LootDrop[];
   spriteKey: string;
   behavior: 'chase' | 'patrol' | 'stationary' | 'ambush';
@@ -221,6 +247,24 @@ export interface EnemyAttack {
   recoveryMs: number;
 }
 
+// ─── Recipe (crafting) ─────────────────────────────────────
+export type CraftingStation = 'apothecary' | 'smithy';
+
+export interface RecipeIngredient {
+  itemId: string;
+  count: number;
+}
+
+export interface Recipe {
+  id: string;
+  outputId: string;
+  outputCount: number;
+  station: CraftingStation;
+  ingredients: RecipeIngredient[];
+  craftTimeMs: number;
+  requiredLevel: number;
+}
+
 // ─── SaveData ─────────────────────────────────────────────
 export interface SaveData {
   schemaVersion: number;
@@ -233,13 +277,10 @@ export interface SaveData {
     y: number;
     direction: Direction;
     stats: Stats;
-    inventory: Item[];
+    inventory: InventoryEntry[]; // slot-indexed; metadata via ItemRegistry
     gold: number;
-    equipment: {
-      weapon: string | null;
-      armor: string | null;
-      accessory: string | null;
-    };
+    equipment: EquipmentSlots;
+    hotbar: (number | null)[]; // 6 inventory-slot refs (or null)
     skills: SkillTree[];
   };
   quests: Quest[];

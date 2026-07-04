@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
-import { SCENES } from '@data/Constants';
+import { SCENES, HOTBAR_SLOTS, RARITY_COLORS } from '@data/Constants';
 import { SaveSystem } from '@systems/SaveSystem';
+import { InventorySystem } from '@systems/InventorySystem';
+import { ItemRegistry } from '@systems/ItemRegistry';
 import { DayNightSystem } from '@systems/DayNightSystem';
 
 interface UIBar {
@@ -22,6 +24,9 @@ export class UIScene extends Phaser.Scene {
   private levelText!: Phaser.GameObjects.Text;
   private goldText!: Phaser.GameObjects.Text;
   private timeIcon!: Phaser.GameObjects.Sprite;
+
+  private hotbarIcons: Phaser.GameObjects.Image[] = [];
+  private hotbarCounts: Phaser.GameObjects.Text[] = [];
 
   private debugContainer!: Phaser.GameObjects.Container;
   private debugText!: Phaser.GameObjects.Text;
@@ -119,8 +124,12 @@ export class UIScene extends Phaser.Scene {
     this.levelText.setText(`LV ${stats.level}`);
     this.updateBar(this.xpBar, stats.xp, stats.xpToNext, 'XP', false);
 
-    // Update Gold (placeholder '0')
-    this.goldText.setText('0');
+    // Update Gold from real save data.
+    const gold = activeSave ? activeSave.player.gold : 0;
+    this.goldText.setText(String(gold));
+
+    // Refresh hotbar item icons + counts from the bound inventory slots.
+    this.refreshHotbar();
 
     // Update time icon based on DayNightSystem
     const phase = DayNightSystem.getInstance().getCurrentPhase();

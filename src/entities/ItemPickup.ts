@@ -1,12 +1,14 @@
 import Phaser from 'phaser';
-import type { Item, Rarity } from '@data/types';
-import { RARITY_COLORS } from '@data/Constants';
+import type { Item } from '@data/types';
 
 export type PickupKind = 'item' | 'gold';
 
 /**
  * A ground pickup (item or gold coin) with a rarity glow. Magnet-snaps
- * to the player when they enter `MAGNET_RANGE`, and is collected on overlap.
+ * to the player when they enter `MAGNET_RANGE`; collection is animated via a
+ * 200ms tween toward the player, a particle burst, a pickup sfx, and a
+ * floating label. Rarity glow is applied by LootSystem (presentation lives
+ * there so ItemPickup stays focused on movement + collection).
  */
 export class ItemPickup extends Phaser.Physics.Arcade.Sprite {
   public readonly kind: PickupKind;
@@ -14,6 +16,11 @@ export class ItemPickup extends Phaser.Physics.Arcade.Sprite {
   public readonly goldAmount: number;
 
   private static readonly MAGNET_RANGE = 32;
+  private static readonly COLLECT_RANGE = 12;
+  private static readonly COLLECT_TWEEN_MS = 200;
+
+  private collecting = false;
+  private collected = false;
 
   constructor(
     scene: Phaser.Scene,
@@ -33,7 +40,6 @@ export class ItemPickup extends Phaser.Physics.Arcade.Sprite {
     } else {
       this.item = opts.item;
       this.goldAmount = 0;
-      this.applyRarityGlow(opts.item.rarity);
     }
 
     const body = this.body as Phaser.Physics.Arcade.Body;
@@ -43,50 +49,93 @@ export class ItemPickup extends Phaser.Physics.Arcade.Sprite {
     this.setDepth(8);
   }
 
-  /** Rarity-coloured glow via Phaser 4 filters API. */
-  private applyRarityGlow(rarity: Rarity): void {
-    const color = RARITY_COLORS[rarity] ?? RARITY_COLORS.common;
-    try {
-      this.enableFilters();
-      (this as unknown as { filters: { add: (n: string, o: object) => void } })
-        .filters.add('Glow', { color, strength: 2 });
-    } catch {
-      // Filters unavailable (e.g. WebGL disabled) — tint fallback.
-      this.setTint(color);
-      this.setTintMode(Phaser.Display.TintModes.MULTIPLY);
-    }
-  }
-
   /**
-   * Per-frame: if the target is within magnet range, tween toward it.
-   * Returns true once collected (caller destroys).
+   * Per-frame: if the target is within magnet range, begin a one-shot collect
+   * tween. Returns true once the collection animation has finished (caller
+   * then applies the pickup effect and destroys the sprite).
    */
   updateMagnet(target: { x: number; y: number }): boolean {
+    if (this.collected) return true;
+    if (this.collecting) return false;
+
     const dist = Phaser.Math.Distance.Between(this.x, this.y, target.x, target.y);
-    if (dist <= ItemPickup.MAGNET_RANGE) {
-      const body = this.body as Phaser.Physics.Arcade.Body;
-      const dx = target.x - this.x;
-      const dy = target.y - this.y;
-      const len = Math.hypot(dx, dy) || 1;
-      body.setVelocity((dx / len) * 200, (dy / len) * 200);
-    } else {
+    if (dist > ItemPickup.MAGNET_RANGE) {
       const body = this.body as Phaser.Physics.Arcade.Body;
       body.setVelocity(0, 0);
+      return false;
     }
-    return dist <= 12; // collected when overlapping
+
+    // Within collect range — skip the tween and collect immediately.
+    if (dist <= ItemPickup.COLLECT_RANGE) {
+      this.collected = true;
+      return true;
+    }
+
+    // Start the magnet tween toward the player.
+    this.collecting = true;
+    const body = this.body as Phaser.Physics.Arcade.Body;
+    body.setVelocity(0, 0);
+    this.scene.tweens.add({
+      targets: this,
+      x: target.x,
+      y: target.y,
+      duration: ItemPickup.COLLECT_TWEEN_MS,
+      ease: 'Quad.in',
+      onComplete: () => {
+        this.collecting = false;
+        this.collected = true;
+      },
+    });
+    return false;
   }
 
-  /** Spawn a pickup burst on collection. */
+  /** Returns true once the collect tween has resolved. */
+  isCollected(): boolean {
+    return this.collected;
+  }
+
+  /** Spawn a 4-particle burst on collection. */
   playPickupBurst(): void {
     if (!this.scene.textures.exists('ember-particle')) return;
     const emitter = this.scene.add.particles(this.x, this.y, 'ember-particle', {
       speed: { min: 30, max: 80 },
       lifespan: 300,
-      quantity: 6,
+      quantity: 4,
       scale: { start: 1, end: 0 },
       emitting: false,
     });
-    emitter.explode(6, this.x, this.y);
+    emitter.explode(4, this.x, this.y);
     this.scene.time.delayedCall(400, () => emitter.destroy());
   }
+
+  /** Play the pickup sfx (silent if the asset is missing). */
+  playPickupSfx(): void {
+    try {
+      if (this.scene.sound && this.scene.sound.get('sfx-pickup')) {
+        this.scene.sound.play('sfx-pickup', { volume: 0.4 });
+      }
+    } catch {
+      /* sfx asset missing — silent placeholder */
+    }
+  }
+
+  /** Floating "+N <name>" label above the collector. */
+  spawnFloatingLabel(text: string, color = '#ffd700'): void {
+    const label = this.scene.add.text(this.x, this.y - 20, text, {
+      fontSize: '13px',
+      color,
+      fontFamily: 'monospace',
+      fontStyle: 'bold',
+      stroke: '#000',
+      strokeThickness: 3,
+    }).setOrigin(0.5).setDepth(100);
+    this.scene.tweens.add({
+      targets: label,
+      y: label.y - 28,
+      alpha: 0,
+      duration: 900,
+      onComplete: () => label.destroy(),
+    });
+  }
 }
+

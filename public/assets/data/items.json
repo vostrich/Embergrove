@@ -11,13 +11,15 @@
     "effect": null,
     "stackable": false,
     "quantity": 1,
-    "maxStack": 1
+    "maxStack": 1,
+    "weight": 3,
+    "value": 5
   },
   {
     "id": "ember-lantern",
     "name": "Ember Lantern",
     "description": "A small lantern that burns with a faint ember glow. Keeps the mist at bay.",
-    "type": "accessory",
+    "type": "lantern",
     "rarity": "uncommon",
     "level": 1,
     "stats": { "defense": 1 },
@@ -25,7 +27,9 @@
     "effect": null,
     "stackable": false,
     "quantity": 1,
-    "maxStack": 1
+    "maxStack": 1,
+    "weight": 2,
+    "value": 25
   },
   {
     "id": "healing-salve",
@@ -43,7 +47,9 @@
     },
     "stackable": true,
     "quantity": 3,
-    "maxStack": 10
+    "maxStack": 10,
+    "weight": 0.2,
+    "value": 10
   },
   {
     "id": "ember-shard",
@@ -57,7 +63,9 @@
     "effect": null,
     "stackable": true,
     "quantity": 1,
-    "maxStack": 99
+    "maxStack": 99,
+    "weight": 0.1,
+    "value": 3
   },
   {
     "id": "iron-blade",
@@ -71,7 +79,9 @@
     "effect": null,
     "stackable": false,
     "quantity": 1,
-    "maxStack": 1
+    "maxStack": 1,
+    "weight": 4,
+    "value": 40
   },
   {
     "id": "veilforged-edge",
@@ -87,6 +97,76 @@
     "effect": null,
     "stackable": false,
     "quantity": 1,
-    "maxStack": 1
+    "maxStack": 1,
+    "weight": 4,
+    "value": 250
+  },
+  {
+    "id": "iron-ore",
+    "name": "Iron Ore",
+    "description": "A rough nugget of iron ore, smelted at the smithy into workable metal.",
+    "type": "material",
+    "rarity": "common",
+    "level": 1,
+    "stats": {},
+    "affixes": [],
+    "effect": null,
+    "stackable": true,
+    "quantity": 1,
+    "maxStack": 99,
+    "weight": 0.5,
+    "value": 2
+  },
+  {
+    "id": "moon-herb",
+    "name": "Moon Herb",
+    "description": "A pale herb that blooms only under moonlight. A potent restorative base.",
+    "type": "material",
+    "rarity": "uncommon",
+    "level": 1,
+    "stats": {},
+    "affixes": [],
+    "effect": null,
+    "stackable": true,
+    "quantity": 1,
+    "maxStack": 99,
+    "weight": 0.1,
+    "value": 8
+  },
+  {
+    "id": "veil-essence",
+    "name": "Veil Essence",
+    "description": "A wisp of condensed Hollow Veil. It writhes faintly when held.",
+    "type": "material",
+    "rarity": "veilforged",
+    "level": 1,
+    "stats": {},
+    "affixes": [],
+    "effect": null,
+    "stackable": true,
+    "quantity": 1,
+    "maxStack": 99,
+    "weight": 0.1,
+    "value": 30
+  },
+  {
+    "id": "greater-healing-salve",
+    "name": "Greater Healing Salve",
+    "description": "A potent salve infused with moon-herb. Restores a great deal of health.",
+    "type": "consumable",
+    "rarity": "uncommon",
+    "level": 1,
+    "stats": {},
+    "affixes": [],
+    "effect": {
+      "type": "heal_hp",
+      "value": 75,
+      "durationMs": 0
+    },
+    "stackable": true,
+    "quantity": 1,
+    "maxStack": 10,
+    "weight": 0.2,
+    "value": 35
   }
 ]

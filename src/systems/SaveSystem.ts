@@ -1,5 +1,5 @@
-import type { SaveData, Item, Direction, Stats, Quest, SkillTree } from '@data/types';
-import { ItemType, Rarity, QuestStatus } from '@data/types';
+import type { SaveData, Stats, Quest, SkillTree, InventoryEntry } from '@data/types';
+import { Direction, QuestStatus } from '@data/types';
 import {
   SAVE_KEY_PREFIX,
   SAVE_SCHEMA_VERSION,
@@ -7,6 +7,7 @@ import {
   PLAYER_BASE_HP,
   PLAYER_BASE_STAMINA,
   PLAYER_BASE_MANA,
+  HOTBAR_SLOTS,
   SCENES,
   xpToLevel,
   MAX_LEVEL,
@@ -107,16 +108,19 @@ export class SaveSystem {
         y: 400,
         direction: Direction.Down,
         stats: SaveSystem.createStartingStats(),
+        // Starting gear is equipped, not duplicated in the bag. The bag
+        // holds a couple of starter consumables in slots 0–1.
         inventory: [
-          SaveSystem.createItem('rusted-blade'),
-          SaveSystem.createItem('ember-lantern'),
+          { slot: 0, itemId: 'healing-salve', count: 3 },
         ],
         gold: 0,
         equipment: {
           weapon: 'rusted-blade',
           armor: null,
-          accessory: null,
+          charm: null,
+          lantern: 'ember-lantern',
         },
+        hotbar: [0, null, null, null, null, null],
         skills: [],
       },
       quests: [],
@@ -185,14 +189,108 @@ export class SaveSystem {
       }
     }
 
-    if (data.schemaVersion >= current) return data;
+    if (data.schemaVersion >= current) {
+      // Still ensure v2 shape is present even on already-v2 saves.
+      SaveSystem.ensureV2Shape(data);
+      return data;
+    }
+
+    // ── v1 → v2 migration ──
+    // 1. inventory: Item[] → InventoryEntry[] (slot-indexed).
+    // 2. equipment: weapon/armor/accessory → weapon/armor/charm/lantern.
+    // 3. hotbar: add (length 6, all null).
+    if (data.schemaVersion < 2) {
+      SaveSystem.migrateV1ToV2(data);
+    }
 
     // Future schema migrations go here, e.g.:
-    // if (data.schemaVersion < 2) { apply v2 migrations; }
     // if (data.schemaVersion < 3) { apply v3 migrations; }
 
     data.schemaVersion = current;
     return data;
+  }
+
+  /**
+   * v1 → v2: convert legacy Item[] inventory to slot-indexed entries, split
+   * the old accessory equipment slot into charm/lantern, and add a hotbar.
+   * Idempotent — safe to call on partially-migrated data.
+   */
+  private static migrateV1ToV2(data: SaveData): void {
+    const p = data.player as SaveData['player'] & {
+      inventory?: unknown;
+      equipment?: Record<string, string | null> & { accessory?: string | null };
+      hotbar?: (number | null)[];
+    };
+
+    // Inventory: accept either legacy Item[] or already-slot-indexed entries.
+    if (Array.isArray(p.inventory)) {
+      const looksLikeItems = p.inventory.every(
+        (e) => e !== null && typeof e === 'object' && 'id' in (e as object)
+      );
+      if (looksLikeItems) {
+        // Legacy Item[] → compact into InventoryEntry[] by slot index.
+        const entries: InventoryEntry[] = [];
+        (p.inventory as Array<{ id: string; quantity?: number; stackable?: boolean }>)
+          .forEach((item, index) => {
+            const count = item.quantity ?? 1;
+            // Stack stackable items together; otherwise occupy a new slot.
+            if (item.stackable) {
+              const existing = entries.find((e) => e.itemId === item.id);
+              if (existing) {
+                existing.count += count;
+                return;
+              }
+            }
+            entries.push({ slot: index, itemId: item.id, count });
+          });
+        // Re-compact slot indices to be contiguous starting at 0.
+        entries.forEach((e, i) => { e.slot = i; });
+        p.inventory = entries;
+      }
+      // else: already InventoryEntry[] — leave as-is.
+    } else {
+      p.inventory = [];
+    }
+
+    // Equipment: split legacy `accessory` into charm/lantern.
+    const eq = p.equipment ?? { weapon: null, armor: null, charm: null, lantern: null };
+    const legacyAccessory = eq.accessory ?? null;
+    delete eq.accessory;
+    if (legacyAccessory === 'ember-lantern') {
+      eq.lantern = legacyAccessory;
+    } else if (legacyAccessory) {
+      eq.charm = legacyAccessory;
+    }
+    if (eq.weapon === undefined) eq.weapon = null;
+    if (eq.armor === undefined) eq.armor = null;
+    if (eq.charm === undefined) eq.charm = null;
+    if (eq.lantern === undefined) eq.lantern = null;
+    p.equipment = {
+      weapon: eq.weapon,
+      armor: eq.armor,
+      charm: eq.charm,
+      lantern: eq.lantern,
+    };
+
+    // Hotbar: add if missing.
+    if (!Array.isArray(p.hotbar)) {
+      p.hotbar = new Array(HOTBAR_SLOTS).fill(null);
+    }
+  }
+
+  /** Ensure v2 fields exist even on saves that report schemaVersion ≥ 2. */
+  private static ensureV2Shape(data: SaveData): void {
+    const p = data.player as SaveData['player'] & {
+      equipment?: Record<string, string | null> & { accessory?: string | null };
+    };
+    if (p.equipment && 'accessory' in p.equipment && !('charm' in p.equipment)) {
+      // A v1-shaped equipment block slipped through; normalise.
+      SaveSystem.migrateV1ToV2(data);
+    }
+    if (!Array.isArray((data.player as { hotbar?: unknown }).hotbar)) {
+      (data.player as { hotbar: (number | null)[] }).hotbar =
+        new Array(HOTBAR_SLOTS).fill(null);
+    }
   }
 
   // ── Internal Helpers ────────────────────────────────────
@@ -217,45 +315,5 @@ export class SaveSystem {
       xp: 0,
       xpToNext: xpToLevel(1),
     };
-  }
-
-  private static createItem(id: string): Item {
-    const templates: Record<string, Item> = {
-      'rusted-blade': {
-        id: 'rusted-blade',
-        name: 'Rusted Blade',
-        description: 'A worn blade, still sharp enough to cut veil-rats.',
-        type: ItemType.Weapon,
-        rarity: Rarity.Common,
-        level: 1,
-        stats: { attack: 3 },
-        affixes: [],
-        effect: null,
-        stackable: false,
-        quantity: 1,
-        maxStack: 1,
-      },
-      'ember-lantern': {
-        id: 'ember-lantern',
-        name: 'Ember Lantern',
-        description: 'A small lantern that burns with a faint ember glow. Keeps the mist at bay.',
-        type: ItemType.Accessory,
-        rarity: Rarity.Uncommon,
-        level: 1,
-        stats: { defense: 1 },
-        affixes: [],
-        effect: null,
-        stackable: false,
-        quantity: 1,
-        maxStack: 1,
-      },
-    };
-
-    const template = templates[id];
-    if (!template) {
-      throw new Error(`Unknown starting item template: ${id}`);
-    }
-
-    return { ...template, affixes: [...template.affixes] };
   }
 }

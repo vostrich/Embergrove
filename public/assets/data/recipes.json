@@ -1,0 +1,50 @@
+[
+  {
+    "id": "healing-salve-basic",
+    "outputId": "healing-salve",
+    "outputCount": 1,
+    "station": "apothecary",
+    "ingredients": [
+      { "itemId": "ember-shard", "count": 3 }
+    ],
+    "craftTimeMs": 2000,
+    "requiredLevel": 1
+  },
+  {
+    "id": "iron-blade-craft",
+    "outputId": "iron-blade",
+    "outputCount": 1,
+    "station": "smithy",
+    "ingredients": [
+      { "itemId": "ember-shard", "count": 5 },
+      { "itemId": "iron-ore", "count": 3 }
+    ],
+    "craftTimeMs": 5000,
+    "requiredLevel": 3
+  },
+  {
+    "id": "greater-salve",
+    "outputId": "greater-healing-salve",
+    "outputCount": 1,
+    "station": "apothecary",
+    "ingredients": [
+      { "itemId": "ember-shard", "count": 5 },
+      { "itemId": "moon-herb", "count": 2 }
+    ],
+    "craftTimeMs": 3000,
+    "requiredLevel": 5
+  },
+  {
+    "id": "veilforged-edge-craft",
+    "outputId": "veilforged-edge",
+    "outputCount": 1,
+    "station": "smithy",
+    "ingredients": [
+      { "itemId": "iron-ore", "count": 5 },
+      { "itemId": "veil-essence", "count": 3 },
+      { "itemId": "ember-shard", "count": 10 }
+    ],
+    "craftTimeMs": 10000,
+    "requiredLevel": 10
+  }
+]
